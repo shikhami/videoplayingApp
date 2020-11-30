@@ -30,8 +30,9 @@ dependencies:
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
   path_provider: ^1.6.24
-  permission_handler: ^5.0.1+1
-  flutter_downloader: ^1.5.2
+  permission_handler: ^3.0.0
+  # flutter_downloader: ^1.5.2
+  # downloads_path_provider_28: ^0.1.0
   downloads_path_provider: ^0.1.0
   open_file: ^3.0.3
   flutter_local_notifications: ^3.0.1+6

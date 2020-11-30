@@ -8,8 +8,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
- 
 import 'package:path/path.dart' as path;
 
 void main() => runApp(MyApp());
@@ -38,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final String _fileUrl = "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8";
-  final String _fileName = "DSCF0277.jpg";
+  final String _fileName = "f08e80da-bf1d-4e3d-8899-f0f6155f6efa";
   final Dio _dio = Dio();
 
   String _progress = "-";
@@ -52,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     final android = AndroidInitializationSettings('@mipmap/ic_launcher');
     final iOS = IOSInitializationSettings();
-    final initSettings = InitializationSettings();
+      final initSettings = InitializationSettings(android:android, iOS:iOS);
 
     flutterLocalNotificationsPlugin.initialize(initSettings, onSelectNotification: _onSelectNotification);
   }
@@ -82,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       importance: Importance.max
     );
     final iOS = IOSNotificationDetails();
-    final platform = NotificationDetails();
+    final platform = NotificationDetails(android:android, iOS:iOS);
     final json = jsonEncode(downloadStatus);
     final isSuccess = downloadStatus['isSuccess'];
 
@@ -109,13 +107,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<bool> _requestPermissions() async {
-    var permission = await PermissionHandlerPlatform.instance.checkPermissionStatus(Permission.storage);
+    var permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.storage);
 
     if (permission != PermissionStatus.granted) {
-      await PermissionHandlerPlatform.instance.requestPermissions([Permission.storage]);
-      //await [PermissionGroup.storage].request()
-
-      permission = await PermissionHandlerPlatform.instance.checkPermissionStatus(Permission.storage);
+      await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+      permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.storage);
     }
 
     return permission == PermissionStatus.granted;
